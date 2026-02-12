@@ -1,0 +1,13 @@
+database:
+  dsn: "host=localhost user=gorm password=gorm dbname=gorm port=5432 sslmode=disable TimeZone=Europe/Moscow"
+
+logging:
+  level: "debug"
+
+http:
+  port: 8000
+  read_timeout: 1s
+  write_timeout: 1s
+  shutdown_timeout: 3s
+
+  cors_origins: ["*"]

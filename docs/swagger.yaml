@@ -1,0 +1,301 @@
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  test_task_internal_controller_dto.CreateSubscription:
+    properties:
+      end_date:
+        type: string
+      price:
+        type: integer
+      service_name:
+        type: string
+      start_date:
+        type: string
+      user_id:
+        type: string
+    type: object
+  test_task_internal_controller_dto.ListSubscriptionsResult:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/test_task_internal_entity.Subscription'
+        type: array
+    type: object
+  test_task_internal_controller_dto.ReadSubscriptionResult:
+    properties:
+      data:
+        $ref: '#/definitions/test_task_internal_entity.Subscription'
+    type: object
+  test_task_internal_controller_dto.SumSubscriptionPricesResult:
+    properties:
+      sum:
+        type: integer
+    type: object
+  test_task_internal_controller_dto.UpdateSubscription:
+    properties:
+      end_date:
+        type: string
+      id:
+        type: integer
+      start_date:
+        type: string
+    required:
+    - id
+    type: object
+  test_task_internal_entity.Subscription:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      end_date:
+        type: string
+      id:
+        type: integer
+      price:
+        type: integer
+      service_name:
+        type: string
+      start_date:
+        type: string
+      updatedAt:
+        type: string
+      user_id:
+        type: string
+    type: object
+  test_task_internal_erroring.ErrorCode:
+    enum:
+    - error_code_example
+    - request_validation
+    - internal_error
+    type: string
+    x-enum-varnames:
+    - ErrorCodeExample
+    - RequestValidationCode
+    - InternalServerCode
+  test_task_internal_erroring.HTTPInternalServerError:
+    properties:
+      code:
+        $ref: '#/definitions/test_task_internal_erroring.ErrorCode'
+      data: {}
+      message:
+        type: string
+    type: object
+  test_task_internal_erroring.HTTPRequestValidationError:
+    properties:
+      code:
+        $ref: '#/definitions/test_task_internal_erroring.ErrorCode'
+      data:
+        items:
+          $ref: '#/definitions/test_task_internal_erroring.ValidationErrorFieldDTO'
+        type: array
+      message:
+        type: string
+    type: object
+  test_task_internal_erroring.ValidationErrorFieldDTO:
+    properties:
+      field:
+        type: string
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /subscription:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет подписку у пользователя
+      operationId: subscription_delete
+      parameters:
+      - in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/test_task_internal_erroring.HTTPRequestValidationError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/test_task_internal_erroring.HTTPInternalServerError'
+      summary: Удаление подписки пользователя
+      tags:
+      - subscriptions
+    get:
+      consumes:
+      - application/json
+      description: Возвращает конкретную подписку
+      operationId: subscription_retrieve
+      parameters:
+      - in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/test_task_internal_controller_dto.ReadSubscriptionResult'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/test_task_internal_erroring.HTTPRequestValidationError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/test_task_internal_erroring.HTTPInternalServerError'
+      summary: Retrieve подписки
+      tags:
+      - subscriptions
+    patch:
+      consumes:
+      - application/json
+      description: Обновляет конкретную подписку пользователя
+      operationId: subscription_update
+      parameters:
+      - description: Входные параметры
+        in: body
+        name: json-string
+        required: true
+        schema:
+          $ref: '#/definitions/test_task_internal_controller_dto.UpdateSubscription'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/test_task_internal_erroring.HTTPRequestValidationError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/test_task_internal_erroring.HTTPInternalServerError'
+      summary: Обновление конкретной подписки пользователя
+      tags:
+      - subscriptions
+    post:
+      consumes:
+      - application/json
+      description: Создает подписку для пользователя для указанного сервиса
+      operationId: subscription_create
+      parameters:
+      - description: Входные параметры
+        in: body
+        name: json-string
+        required: true
+        schema:
+          $ref: '#/definitions/test_task_internal_controller_dto.CreateSubscription'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/test_task_internal_erroring.HTTPRequestValidationError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/test_task_internal_erroring.HTTPInternalServerError'
+      summary: Создание подписки для пользователя
+      tags:
+      - subscriptions
+  /subscriptions:
+    get:
+      consumes:
+      - application/json
+      description: Выдает список подписок пользователя с пагинацией, количество элементов
+        на странице - 20
+      operationId: subscription_list
+      parameters:
+      - in: query
+        name: end_date
+        type: string
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: service_name
+        type: string
+      - in: query
+        name: start_date
+        type: string
+      - in: query
+        name: user_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/test_task_internal_controller_dto.ListSubscriptionsResult'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/test_task_internal_erroring.HTTPRequestValidationError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/test_task_internal_erroring.HTTPInternalServerError'
+      summary: Выдача списка подписок пользователя
+      tags:
+      - subscriptions
+  /subscriptions/overral_sum:
+    get:
+      consumes:
+      - application/json
+      description: Высчитывает сумму стоимости всех подписок за выбранный период,
+        по названию подписки для конкретного пользователя
+      operationId: subscription_overral_sum
+      parameters:
+      - in: query
+        name: end_date
+        type: string
+      - in: query
+        name: service_name
+        type: string
+      - in: query
+        name: start_date
+        type: string
+      - in: query
+        name: user_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/test_task_internal_controller_dto.SumSubscriptionPricesResult'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/test_task_internal_erroring.HTTPRequestValidationError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/test_task_internal_erroring.HTTPInternalServerError'
+      summary: Калькуляция суммы стоимости всех подписок
+      tags:
+      - subscriptions
+swagger: "2.0"

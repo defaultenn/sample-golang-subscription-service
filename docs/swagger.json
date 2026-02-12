@@ -1,0 +1,459 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/subscription": {
+            "get": {
+                "description": "Возвращает конкретную подписку",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subscriptions"
+                ],
+                "summary": "Retrieve подписки",
+                "operationId": "subscription_retrieve",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_controller_dto.ReadSubscriptionResult"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_erroring.HTTPRequestValidationError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_erroring.HTTPInternalServerError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Создает подписку для пользователя для указанного сервиса",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subscriptions"
+                ],
+                "summary": "Создание подписки для пользователя",
+                "operationId": "subscription_create",
+                "parameters": [
+                    {
+                        "description": "Входные параметры",
+                        "name": "json-string",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_controller_dto.CreateSubscription"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_erroring.HTTPRequestValidationError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_erroring.HTTPInternalServerError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Удаляет подписку у пользователя",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subscriptions"
+                ],
+                "summary": "Удаление подписки пользователя",
+                "operationId": "subscription_delete",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_erroring.HTTPRequestValidationError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_erroring.HTTPInternalServerError"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Обновляет конкретную подписку пользователя",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subscriptions"
+                ],
+                "summary": "Обновление конкретной подписки пользователя",
+                "operationId": "subscription_update",
+                "parameters": [
+                    {
+                        "description": "Входные параметры",
+                        "name": "json-string",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_controller_dto.UpdateSubscription"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_erroring.HTTPRequestValidationError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_erroring.HTTPInternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/subscriptions": {
+            "get": {
+                "description": "Выдает список подписок пользователя с пагинацией, количество элементов на странице - 20",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subscriptions"
+                ],
+                "summary": "Выдача списка подписок пользователя",
+                "operationId": "subscription_list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "end_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "service_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_controller_dto.ListSubscriptionsResult"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_erroring.HTTPRequestValidationError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_erroring.HTTPInternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/subscriptions/overral_sum": {
+            "get": {
+                "description": "Высчитывает сумму стоимости всех подписок за выбранный период, по названию подписки для конкретного пользователя",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subscriptions"
+                ],
+                "summary": "Калькуляция суммы стоимости всех подписок",
+                "operationId": "subscription_overral_sum",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "end_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "service_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_controller_dto.SumSubscriptionPricesResult"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_erroring.HTTPRequestValidationError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/test_task_internal_erroring.HTTPInternalServerError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "gorm.DeletedAt": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
+        "test_task_internal_controller_dto.CreateSubscription": {
+            "type": "object",
+            "properties": {
+                "end_date": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "service_name": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "test_task_internal_controller_dto.ListSubscriptionsResult": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/test_task_internal_entity.Subscription"
+                    }
+                }
+            }
+        },
+        "test_task_internal_controller_dto.ReadSubscriptionResult": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/test_task_internal_entity.Subscription"
+                }
+            }
+        },
+        "test_task_internal_controller_dto.SumSubscriptionPricesResult": {
+            "type": "object",
+            "properties": {
+                "sum": {
+                    "type": "integer"
+                }
+            }
+        },
+        "test_task_internal_controller_dto.UpdateSubscription": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "end_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "start_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "test_task_internal_entity.Subscription": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "service_name": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "test_task_internal_erroring.ErrorCode": {
+            "type": "string",
+            "enum": [
+                "error_code_example",
+                "request_validation",
+                "internal_error"
+            ],
+            "x-enum-varnames": [
+                "ErrorCodeExample",
+                "RequestValidationCode",
+                "InternalServerCode"
+            ]
+        },
+        "test_task_internal_erroring.HTTPInternalServerError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "$ref": "#/definitions/test_task_internal_erroring.ErrorCode"
+                },
+                "data": {},
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "test_task_internal_erroring.HTTPRequestValidationError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "$ref": "#/definitions/test_task_internal_erroring.ErrorCode"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/test_task_internal_erroring.ValidationErrorFieldDTO"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "test_task_internal_erroring.ValidationErrorFieldDTO": {
+            "type": "object",
+            "properties": {
+                "field": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
