@@ -15,8 +15,8 @@ services:
       - "8000:8000"
     environment:
       - TZ=Europe/Moscow
-      - APP_ENV=production
-      - DATABASE_DSN=host=postgres user=gorm password=gorm dbname=gorm port=5432 sslmode=disable TimeZone=Europe/Moscow
+      - LOG_LEVEL=debug
+      - DATABASE_DSN="host=postgres user=gorm password=gorm dbname=gorm port=5432 sslmode=disable TimeZone=Europe/Moscow"
     networks:
       - app-network
     healthcheck:
