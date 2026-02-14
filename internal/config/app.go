@@ -1,6 +1,11 @@
 package config
 
-import "github.com/ilyakaznacheev/cleanenv"
+import (
+	"errors"
+	"os"
+
+	"github.com/ilyakaznacheev/cleanenv"
+)
 
 type (
 	AppConfig struct {
@@ -19,7 +24,7 @@ type (
 func NewConfig() AppConfigInterface {
 	cfg := &AppConfig{}
 
-	if err := cleanenv.ReadConfig("./config.yaml", cfg); err != nil {
+	if err := cleanenv.ReadConfig("./config.yaml", cfg); err != nil && !errors.Is(err, os.ErrNotExist) {
 		panic(err)
 	}
 

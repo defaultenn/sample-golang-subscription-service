@@ -7,7 +7,21 @@ import (
 	"test_task/internal/erroring"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
+
+type SubscriptionResultItem struct {
+	ID          uint           `json:"id"`
+	ServiceName string         `json:"service_name"`
+	UserID      uuid.UUID      `json:"user_id"`
+	Price       uint           `json:"price"`
+	StartDate   dto.MonthYear  `json:"start_date"`
+	EndDate     *dto.MonthYear `json:"end_date"`
+}
+
+type ListSubscriptionsResult struct {
+	Data []*SubscriptionResultItem `json:"data"`
+}
 
 // @Summary     Выдача списка подписок пользователя
 // @Description Выдает список подписок пользователя с пагинацией, количество элементов на странице - 20
@@ -16,7 +30,7 @@ import (
 // @Accept      json
 // @Produce     json
 // @Param       query-params query dto.ListSubscriptions true "Входные параметры"
-// @Success     200 {object} dto.ListSubscriptionsResult
+// @Success     200 {object} ListSubscriptionsResult
 // @Failure     422 {object} erroring.HTTPRequestValidationError
 // @Failure     500 {object} erroring.HTTPInternalServerError
 // @Router      /subscriptions [get]
@@ -39,12 +53,12 @@ func (router *SubscriptionRouter) ListSubscriptionsRoute(ctx *gin.Context) {
 		return
 	}
 
-	result := &dto.ListSubscriptionsResult{
-		Data: make([]*dto.SubscriptionResultItem, 0, len(subs)),
+	result := &ListSubscriptionsResult{
+		Data: make([]*SubscriptionResultItem, 0, len(subs)),
 	}
 
 	for _, sub := range subs {
-		subItem := dto.SubscriptionResultItem{
+		subItem := SubscriptionResultItem{
 			ID:          sub.ID,
 			ServiceName: sub.ServiceName,
 			Price:       sub.Price,

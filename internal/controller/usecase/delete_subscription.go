@@ -18,5 +18,5 @@ func DeleteSubscription(
 	// Место для бизнес правил
 
 	err = repo.DeleteSubscription(db, params)
-	return nil
+	return
 }

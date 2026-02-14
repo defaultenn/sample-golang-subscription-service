@@ -18,5 +18,5 @@ func UpdateSubscription(
 	// Место для бизнес правил
 
 	_, err = repo.UpdateSubscription(db, params)
-	return nil
+	return
 }

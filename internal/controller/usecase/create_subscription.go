@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"test_task/internal/entity"
 	"test_task/internal/repo"
 
 	"gorm.io/gorm"
@@ -13,10 +14,9 @@ type ICreateSubscriptionParams interface {
 func CreateSubscription(
 	db *gorm.DB,
 	params ICreateSubscriptionParams,
-) (err error) {
+) (*entity.Subscription, error) {
 
 	// Место для бизнес правил
 
-	_, err = repo.CreateSubscription(db, params)
-	return
+	return repo.CreateSubscription(db, params)
 }

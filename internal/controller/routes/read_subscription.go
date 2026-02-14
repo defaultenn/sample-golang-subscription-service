@@ -9,6 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type ReadSubscriptionResult struct {
+	Data *SubscriptionResultItem `json:"data"`
+}
+
 // @Summary     Retrieve подписки
 // @Description Возвращает конкретную подписку
 // @ID          subscription_retrieve
@@ -16,7 +20,7 @@ import (
 // @Accept      json
 // @Produce     json
 // @Param       query-params query dto.ReadSubscription true "Входные параметры"
-// @Success     200 {object} dto.ReadSubscriptionResult
+// @Success     200 {object} ReadSubscriptionResult
 // @Failure     422 {object} erroring.HTTPRequestValidationError
 // @Failure     500 {object} erroring.HTTPInternalServerError
 // @Router      /subscription [get]
