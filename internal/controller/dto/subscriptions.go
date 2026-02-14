@@ -1,34 +1,10 @@
 package dto
 
 import (
-	"fmt"
-	"strings"
 	"time"
 
 	"github.com/google/uuid"
 )
-
-type MonthYear time.Time
-
-func (ct *MonthYear) UnmarshalJSON(b []byte) error {
-	s := strings.Trim(string(b), "\"")
-	if s == "" || s == "null" {
-		return nil
-	}
-
-	t, err := time.Parse("01-2006", s)
-	if err == nil {
-		*ct = MonthYear(t)
-		return nil
-	}
-
-	return fmt.Errorf("invalid time format: %s", s)
-}
-
-func (ct MonthYear) MarshalJSON() ([]byte, error) {
-	t := time.Time(ct)
-	return []byte(`"` + t.Format("01-2006") + `"`), nil
-}
 
 type CreateSubscription struct {
 	ServiceName string     `json:"service_name" binding:"required"`
@@ -73,18 +49,21 @@ func (rs *ReadSubscription) GetSubscriptionID() uint {
 	return rs.ID
 }
 
-type ReadSubscriptionResult struct {
-	Data *SubscriptionResultItem `json:"data"`
-}
-
 type UpdateSubscription struct {
-	ID        uint       `json:"id" binding:"gt=0"`
-	StartDate *MonthYear `json:"start_date" binding:"omitempty"`
-	EndDate   *MonthYear `json:"end_date" binding:"omitempty"`
+	ID          uint       `json:"id" binding:"gt=0"`
+	StartDate   *MonthYear `json:"start_date" binding:"omitempty"`
+	EndDate     *MonthYear `json:"end_date" binding:"omitempty"`
+	ServiceName string     `json:"service_name" binding:"omitempty"`
+	UserID      *uuid.UUID `json:"user_id" binding:"omitempty"`
+	Price       uint       `jspn:"price" binding:"omitempty"`
 }
 
 func (us *UpdateSubscription) GetSubscriptionID() uint {
 	return us.ID
+}
+
+func (us *UpdateSubscription) GetPrice() uint {
+	return us.Price
 }
 
 func (us *UpdateSubscription) GetStartDate() *time.Time {
@@ -107,6 +86,14 @@ func (us *UpdateSubscription) GetEndDate() *time.Time {
 		return nil
 	}
 	return &t
+}
+
+func (us *UpdateSubscription) GetServiceName() string {
+	return us.ServiceName
+}
+
+func (us *UpdateSubscription) GetUserID() *uuid.UUID {
+	return us.UserID
 }
 
 type DeleteSubscription struct {
@@ -154,19 +141,6 @@ type ListSubscriptions struct {
 
 func (ls *ListSubscriptions) GetPage() int {
 	return ls.Page
-}
-
-type SubscriptionResultItem struct {
-	ID          uint       `json:"id"`
-	ServiceName string     `json:"service_name"`
-	UserID      uuid.UUID  `json:"user_id"`
-	Price       uint       `json:"price"`
-	StartDate   MonthYear  `json:"start_date"`
-	EndDate     *MonthYear `json:"end_date"`
-}
-
-type ListSubscriptionsResult struct {
-	Data []*SubscriptionResultItem `json:"data"`
 }
 
 type SumSubscriptionPricesParams struct {

@@ -34,8 +34,16 @@ func (s *Subscription) GetUserID() uuid.UUID {
 	return s.UserID
 }
 
+func (s *Subscription) SetUserID(value uuid.UUID) {
+	s.UserID = value
+}
+
 func (s *Subscription) GetPrice() uint {
 	return s.Price
+}
+
+func (s *Subscription) SetPrice(value uint) {
+	s.Price = value
 }
 
 func (s *Subscription) GetStartDate() time.Time {
