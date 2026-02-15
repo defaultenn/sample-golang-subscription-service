@@ -121,7 +121,15 @@ type IOverralPriceSum interface {
 func OverralPriceSum(db *gorm.DB, params IOverralPriceSum) (uint, error) {
 	var sum uint
 
-	if err := SubscriptionListFilter(db, params).Select("COALESCE(SUM(price), 0)").Scan(&sum).Error; err != nil {
+	if err := SubscriptionListFilter(db, params).Select(
+		// сСумма накопленной ценности подписок.
+		// Так как price это цена за месяц,
+		// то вычисляем сколько прошло c начала подписки (extract epoch age),
+		// включая начальный месяц (ceil),
+		// затем умножая на цену месячной подписки
+		// 60 секунд * 60 минут * 24 часа * 30 дней (берем месяц как 30 дней в среднем) = 2592000 секунд
+		"SUM(CEIL(EXTRACT(EPOCH FROM AGE(now(), start_date)) / 2592000) * price) as sum",
+	).Scan(&sum).Error; err != nil {
 		return 0, err
 	}
 

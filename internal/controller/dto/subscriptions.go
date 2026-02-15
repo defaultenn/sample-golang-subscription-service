@@ -9,7 +9,7 @@ import (
 type CreateSubscription struct {
 	ServiceName string     `json:"service_name" binding:"required"`
 	Price       uint       `json:"price" binding:"required"`
-	UserID      uuid.UUID  `json:"user_id" binding:"requred,uuid4"`
+	UserID      uuid.UUID  `json:"user_id" binding:"required,uuid4"`
 	StartDate   MonthYear  `json:"start_date" binding:"required"`
 	EndDate     *MonthYear `json:"end_date" binding:"omitempty"`
 }
